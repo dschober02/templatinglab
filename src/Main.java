@@ -1,42 +1,51 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-interface Ingredient{
+interface Ingredient {
     String getName();
     float getQuantity();
 }
-class SolidIngredient implements Ingredient{
+
+class SolidIngredient implements Ingredient {
     private String name;
     private float quantity;
+
     public SolidIngredient(String name, float quantity) {
         this.name = name;
         this.quantity = quantity;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public float getQuantity(){
+
+    public float getQuantity() {
         return quantity;
     }
-    public String toString(){
+
+    public String toString() {
         return name + ": " + quantity;
     }
 }
 
-class LiquidIngredient implements Ingredient{
+class LiquidIngredient implements Ingredient {
     private String name;
     private float quantity;
-    public LiquidIngredient(String name, float quantity){
+
+    public LiquidIngredient(String name, float quantity) {
         this.name = name;
         this.quantity = quantity;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public float getQuantity(){
+
+    public float getQuantity() {
         return quantity;
     }
-    public String toString(){
+
+    public String toString() {
         return name + ": " + quantity + " cups";
     }
 }
@@ -44,47 +53,76 @@ class LiquidIngredient implements Ingredient{
 class Recipe<T extends Ingredient> {
     private ArrayList<T> ingredients;
     private String name;
-    public Recipe(String name){
+
+    public Recipe(String name) {
         this.name = name;
         ingredients = new ArrayList<>();
     }
-    public Recipe(String name, ArrayList<T> ingredients){
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public Recipe(String name, ArrayList<T> ingredients) {
         this.name = name;
         this.ingredients = ingredients;
     }
 
-    public void addIngredient(T ingredient){
+    public void addIngredient(T ingredient) {
         ingredients.add(ingredient);
     }
 
-    public void print(){
+    public String toString() {
         System.out.println("Recipe for " + name);
-        for (T ingredient : ingredients){
-            System.out.println(ingredient);
+        String oStr = "";
+        for (T ingredient : ingredients) {
+            oStr += "\t" + ingredient.toString() + "\n";
         }
+        return oStr;
     }
 }
 
-class RecipeBook{
+class RecipeBook {
     private ArrayList<Recipe> recipes;
-    public RecipeBook(){
+
+    public RecipeBook() {
         recipes = new ArrayList<>();
     }
-    public RecipeBook(int size){
+
+    public RecipeBook(int size) {
         recipes = new ArrayList<>(size);
     }
-    public void addRecipe(Recipe recipe){
+
+    public void addRecipe(Recipe recipe) {
         recipes.add(recipe);
     }
-    public Recipe getRecipe(int i){
+
+    public Recipe getRecipe(int i) {
         return recipes.get(i);
     }
-    public Recipe removeRecipe(int i){
+
+    public Recipe removeRecipe(int i) {
         return recipes.remove(i);
     }
-}
-public class Main {
 
+    public int size() {
+        return recipes.size();
+    }
+
+    public String toString() {
+        String oStr = "";
+        for (int i = 0; i < recipes.size(); i++) {
+            oStr += i + 1 + ".) " + recipes.get(i).getName() + "\n";
+        }
+        return oStr;
+    }
+}
+
+public class Main {
 
     /*
     Flow of the program:
@@ -119,8 +157,8 @@ public class Main {
                     2.) Add ingredient => ingredientHandler()
 
             5.) Exit ends the program with a nice message
-
      */
+
     // quick method to check if a string is a float
     public static boolean isFloat(String str) {
         try {
@@ -132,7 +170,7 @@ public class Main {
     }
 
     // for displaying menu
-    public static int menu(Scanner keyboard){
+    public static int menu(Scanner keyboard) {
         System.out.println("            Recipe Program");
         System.out.println("________________________________________");
         System.out.println("1. Create new recipe");
@@ -142,7 +180,7 @@ public class Main {
         System.out.println("5. Exit");
         System.out.print("Enter your choice: ");
         String choice = keyboard.next();
-        while (!choice.equals("5") && !choice.equals("4") && !choice.equals("3") && !choice.equals("2") && !choice.equals("1")){
+        while (!choice.equals("5") && !choice.equals("4") && !choice.equals("3") && !choice.equals("2") && !choice.equals("1")) {
             System.out.print("Please enter a valid integer: ");
             choice = keyboard.next();
         }
@@ -150,7 +188,7 @@ public class Main {
     }
 
     // adds as many ingredients to recipe as user wants
-    public static void ingredientHandler(Scanner keyboard, Recipe<Ingredient> recipe){
+    public static void ingredientHandler(Scanner keyboard, Recipe<Ingredient> recipe) {
         String yes = "y";
         while (yes.equals("y")) {
             System.out.print("Ingredient Solid or Liquid? (s/l): ");
@@ -193,15 +231,15 @@ public class Main {
     }
 
     // instantiates new Recipe object and adds it to RecipeBook ArrayList
-    public static void createRecipe(Scanner keyboard, RecipeBook recipes){
+    public static void createRecipe(Scanner keyboard, RecipeBook recipes) {
         String yes = "n";
         String name = "";
-        while (yes.equals("n")){
+        while (yes.equals("n")) {
             System.out.print("Enter recipe name: ");
             name = keyboard.nextLine();
             System.out.print(name + " was entered, is this okay? (y/n): ");
             yes = keyboard.nextLine().toLowerCase();
-            while (!yes.equals("y") && !yes.equals("n")){
+            while (!yes.equals("y") && !yes.equals("n")) {
                 System.out.print("Please input characters y or n: ");
                 yes = keyboard.nextLine();
             }
@@ -209,7 +247,7 @@ public class Main {
         Recipe<Ingredient> recipe = new Recipe<>(name);
         System.out.print("Would you like to add an ingredient? (y/n): ");
         yes = keyboard.nextLine().toLowerCase();
-        while (!yes.equals("y") && !yes.equals("n")){
+        while (!yes.equals("y") && !yes.equals("n")) {
             System.out.print("Please input characters y or n: ");
             yes = keyboard.nextLine();
         }
@@ -217,13 +255,36 @@ public class Main {
         recipes.addRecipe(recipe);
     }
 
+    public static void deleteRecipe(Scanner keyboard, RecipeBook recipes) {
+        System.out.println(recipes);
+        System.out.println("----------------------------------------------");
+        boolean valid = false;
+        int num = -1;
+        while (!valid){
+            System.out.print("Enter the number of the recipe you would like to remove or enter 0 to cancel: ");
+            String number = keyboard.nextLine();
+            try{
+                num = Integer.parseInt(number);
+                if (num >= 0 && num <= recipes.size())
+                    valid = true;
+            }
+            catch(Exception e){
+                System.out.println("Invalid number, please try again");
+            }
+        }
+        if (num != 0){
+            recipes.removeRecipe(num);
+        }
+    }
+
+
     // Handles flow of program
     public static void runProgram(Scanner keyboard, RecipeBook recipes) {
         int choice = menu(keyboard);
-        switch (choice){
+        switch (choice) {
             case 1 -> createRecipe(keyboard, recipes);
-            // case 2 -> displayRecipes(recipes);
-            // case 3 -> deleteRecipe(keyboard, recipes);
+             case 2 -> System.out.println(recipes);
+             case 3 -> deleteRecipe(keyboard, recipes);
             // case 4 -> editRecipe(keyboard, recipes);
             default -> System.out.println("\t\t Have a nice day :)");
         }
@@ -231,11 +292,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Recipe<Ingredient> r = new Recipe<>("Cake");
-        Ingredient si1 = new LiquidIngredient("Milk", 20);
-        Ingredient si2 = new SolidIngredient("Egg", 2);
-        r.addIngredient(si1);
-        r.addIngredient(si2);
-        r.print();
+
     }
 }
