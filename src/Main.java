@@ -4,7 +4,24 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+class RecipeBook{
+    private ArrayList<Recipe> recipes;
+    public RecipeBook(){
+        recipes = new ArrayList<>();
+    }
+    public RecipeBook(int size){
+        recipes = new ArrayList<>(size);
+    }
+    public void addRecipe(Recipe recipe){
+        recipes.add(recipe);
+    }
+    public Recipe getRecipe(int i){
+        return recipes.get(i);
+    }
+    public Recipe removeRecipe(int i){
+        return recipes.remove(i);
+    }
+}
 interface Ingredient{
     String getName();
     float getQuantity();
@@ -69,6 +86,16 @@ class Recipe<T extends Ingredient> {
     }
 }
 public class Main {
+
+    // quick method to check if a string is a float
+    public static boolean isFloat(String str) {
+        try {
+            Float.parseFloat(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     /*
     Flow of the program:
         Print Menu => menu()
@@ -134,16 +161,24 @@ public class Main {
                 System.out.print("Name of ingredient: ");
                 String name = keyboard.nextLine().toLowerCase();
                 System.out.print("Quantity: ");
-                float quantity = Float.parseFloat(keyboard.nextLine());
-                recipe.addIngredient(new SolidIngredient(name, quantity));
+                String quantity = keyboard.nextLine();
+                while (!isFloat(quantity)) {
+                    System.out.print("Please enter a valid number: ");
+                    quantity = keyboard.nextLine();
+                }
+                recipe.addIngredient(new SolidIngredient(name, Float.parseFloat(quantity)));
             }
             // input will always equal 'l' at this point
             else {
                 System.out.print("Name of ingredient: ");
                 String name = keyboard.nextLine();
                 System.out.print("Volume in cups: ");
-                float quantity = Float.parseFloat(keyboard.nextLine());
-                recipe.addIngredient(new SolidIngredient(name, quantity));
+                String quantity = keyboard.nextLine();
+                while (!isFloat(quantity)) {
+                    System.out.print("Please enter a valid number: ");
+                    quantity = keyboard.nextLine();
+                }
+                recipe.addIngredient(new SolidIngredient(name, Float.parseFloat(quantity)));
             }
             // Prompt user to add another ingredient
             System.out.print("Would you like to add an ingredient? (y/n): ");
@@ -154,7 +189,7 @@ public class Main {
             }
         }
     }
-    public static Recipe<Ingredient> createRecipe(Scanner keyboard){
+    public static void createRecipe(Scanner keyboard, RecipeBook recipes){
         String yes = "n";
         String name = "";
         while (yes.equals("n")){
@@ -175,16 +210,16 @@ public class Main {
             yes = keyboard.nextLine();
         }
         ingredientHandler(keyboard, recipe);
-        return recipe;
+        recipes.addRecipe(recipe);
     }
 
-    public static void runProgram(Scanner keyboard, Recipe<Ingredient> recipe) {
+    public static void runProgram(Scanner keyboard, RecipeBook recipes) {
         int choice = menu(keyboard);
         switch (choice){
-            case 1 -> createRecipe(keyboard);
-            //case 2 -> displayRecipes();
-            // case 3 -> deleteRecipe();
-            // case 4 -> editRecipe();
+            case 1 -> createRecipe(keyboard, recipes);
+            // case 2 -> displayRecipes(recipes);
+            // case 3 -> deleteRecipe(keyboard, recipes);
+            // case 4 -> editRecipe(keyboard, recipes);
             default -> System.out.println("\t\t Have a nice day :)");
         }
         System.out.println("Enter");
