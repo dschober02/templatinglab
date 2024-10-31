@@ -71,37 +71,37 @@ class Recipe<T extends Ingredient> {
 public class Main {
     /*
     Flow of the program:
-    Print Menu => menu()
-        1.) Create new Recipe => createRecipe()     --done--
-            Ask and validate name for recipe
-            Create Recipe Object
-            Add Ingredients to the recipe and add to recipe's arrayList => ingredientHandler()
-            Add Recipe to recipe arrayList
+        Print Menu => menu()
+            1.) Create new Recipe => createRecipe()     --done--
+                Ask and validate name for recipe
+                Create Recipe Object
+                Add Ingredients to the recipe and add to recipe's arrayList => ingredientHandler()
+                Add Recipe to recipe arrayList
 
-        2.) View all recipes
-            Use toString and display to console => displayRecipes()
+            2.) View all recipes
+                Use toString and display to console => displayRecipes()
 
-        3.) Delete an existing recipe
-            Use toString and display to console with an index => displayRecipesIndexed()
-            Prompt user to enter which recipe they would like to remove and have a cancel value
-            Validate user input
-            Cancel value exits or use valid index to remove from arraylist
+            3.) Delete an existing recipe
+                Use toString and display to console with an index => displayRecipesIndexed()
+                Prompt user to enter which recipe they would like to remove and have a cancel value
+                Validate user input
+                Cancel value exits or use valid index to remove from arraylist
 
-        4.) Edit an existing Recipe
-            Use toString and display to console with an index => displayRecipesIndexed()
-            Prompt user to enter which recipe they would like to remove and have a cancel value
-            Validate user input
-            Cancel exits and valid index gets recipe:
+            4.) Edit an existing Recipe
+                Use toString and display to console with an index => displayRecipesIndexed()
+                Prompt user to enter which recipe they would like to remove and have a cancel value
+                Validate user input
+                Cancel exits and valid index gets recipe:
 
-                1.) Remove Ingredient
-                    List ingredients indexed
-                    Prompt user which ingredient they would like to remove and have a cancel value
-                    Validate user input
-                    Cancel exits and valid index removes ingredient at the specified index
+                    1.) Remove Ingredient
+                        List ingredients indexed
+                        Prompt user which ingredient they would like to remove and have a cancel value
+                        Validate user input
+                        Cancel exits and valid index removes ingredient at the specified index
 
-                2.) Add ingredient => ingredientHandler()
+                    2.) Add ingredient => ingredientHandler()
 
-        5.) Exit ends the program with a nice message
+            5.) Exit ends the program with a nice message
 
      */
     public static int menu(Scanner keyboard){
