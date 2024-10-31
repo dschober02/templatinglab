@@ -1,27 +1,6 @@
-import org.w3c.dom.ls.LSOutput;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class RecipeBook{
-    private ArrayList<Recipe> recipes;
-    public RecipeBook(){
-        recipes = new ArrayList<>();
-    }
-    public RecipeBook(int size){
-        recipes = new ArrayList<>(size);
-    }
-    public void addRecipe(Recipe recipe){
-        recipes.add(recipe);
-    }
-    public Recipe getRecipe(int i){
-        return recipes.get(i);
-    }
-    public Recipe removeRecipe(int i){
-        return recipes.remove(i);
-    }
-}
 interface Ingredient{
     String getName();
     float getQuantity();
@@ -58,7 +37,7 @@ class LiquidIngredient implements Ingredient{
         return quantity;
     }
     public String toString(){
-        return name + ": " + quantity;
+        return name + ": " + quantity + " cups";
     }
 }
 
@@ -85,17 +64,28 @@ class Recipe<T extends Ingredient> {
         }
     }
 }
+
+class RecipeBook{
+    private ArrayList<Recipe> recipes;
+    public RecipeBook(){
+        recipes = new ArrayList<>();
+    }
+    public RecipeBook(int size){
+        recipes = new ArrayList<>(size);
+    }
+    public void addRecipe(Recipe recipe){
+        recipes.add(recipe);
+    }
+    public Recipe getRecipe(int i){
+        return recipes.get(i);
+    }
+    public Recipe removeRecipe(int i){
+        return recipes.remove(i);
+    }
+}
 public class Main {
 
-    // quick method to check if a string is a float
-    public static boolean isFloat(String str) {
-        try {
-            Float.parseFloat(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+
     /*
     Flow of the program:
         Print Menu => menu()
@@ -131,6 +121,17 @@ public class Main {
             5.) Exit ends the program with a nice message
 
      */
+    // quick method to check if a string is a float
+    public static boolean isFloat(String str) {
+        try {
+            Float.parseFloat(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // for displaying menu
     public static int menu(Scanner keyboard){
         System.out.println("            Recipe Program");
         System.out.println("________________________________________");
@@ -148,6 +149,7 @@ public class Main {
         return Integer.parseInt(choice);
     }
 
+    // adds as many ingredients to recipe as user wants
     public static void ingredientHandler(Scanner keyboard, Recipe<Ingredient> recipe){
         String yes = "y";
         while (yes.equals("y")) {
@@ -189,6 +191,8 @@ public class Main {
             }
         }
     }
+
+    // instantiates new Recipe object and adds it to RecipeBook ArrayList
     public static void createRecipe(Scanner keyboard, RecipeBook recipes){
         String yes = "n";
         String name = "";
@@ -213,6 +217,7 @@ public class Main {
         recipes.addRecipe(recipe);
     }
 
+    // Handles flow of program
     public static void runProgram(Scanner keyboard, RecipeBook recipes) {
         int choice = menu(keyboard);
         switch (choice){
