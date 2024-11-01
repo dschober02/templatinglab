@@ -256,7 +256,6 @@ public class Main {
         recipes.addRecipe(recipe);
     }
     public static void viewRecipe(Scanner keyboard, RecipeBook recipes){
-        // todo: finish view recipe
         System.out.println(recipes);
         System.out.println("----------------------------------------------");
         System.out.print("Enter the number of the recipe you would like to view or enter 0 to cancel: ");
