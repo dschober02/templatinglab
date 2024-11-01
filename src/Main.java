@@ -2,6 +2,9 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// todo: Make Solid Ingredient in grams
+// todo: Set up instructions
+
 interface Ingredient {
     String getName();
     void setQuantity(float quantity);
@@ -10,11 +13,11 @@ interface Ingredient {
 
 class SolidIngredient implements Ingredient {
     private final String name;
-    private float quantity;
+    private float grams;
 
     public SolidIngredient(String name, float quantity) {
         this.name = name;
-        this.quantity = quantity;
+        this.grams = quantity;
     }
 
     public String getName() {
@@ -22,15 +25,15 @@ class SolidIngredient implements Ingredient {
     }
 
     public void setQuantity(float quantity) {
-        this.quantity = quantity;
+        this.grams = quantity;
     }
 
     public float getQuantity() {
-        return quantity;
+        return grams;
     }
 
     public String toString() {
-        return name + ": " + quantity;
+        return name + ": " + grams;
     }
 }
 
@@ -58,10 +61,14 @@ class LiquidIngredient implements Ingredient {
         return name + ": " + quantity + " cups";
     }
 }
-
+/*
+Extend here does not relate to inheritance or interface, but in terms of templating, extends
+indicates a constraint.
+ */
 class Recipe<T extends Ingredient> {
     private final ArrayList<T> ingredients;
     private String name;
+    private String instructions;
 
     public Recipe(String name) {
         this.name = name;
@@ -72,6 +79,9 @@ class Recipe<T extends Ingredient> {
         return ingredients.get(index);
     }
 
+    public String getInstructions(){
+        return instructions;
+    }
     public String getName() {
         return name;
     }
@@ -80,9 +90,14 @@ class Recipe<T extends Ingredient> {
         this.name = name;
     }
 
-    public Recipe(String name, ArrayList<T> ingredients) {
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public Recipe(String name, String instructions) {
         this.name = name;
-        this.ingredients = ingredients;
+        this.instructions = instructions;
+        this.ingredients = new ArrayList<>();
     }
 
     public T removeIngredient(int index) {
@@ -90,6 +105,14 @@ class Recipe<T extends Ingredient> {
     }
     public void addIngredient(T ingredient) {
         ingredients.add(ingredient);
+    }
+
+    public String getName(int i){
+        return ingredients.get(i).getName();
+    }
+
+    public float getQuantity(int i){
+        return ingredients.get(i).getQuantity();
     }
 
     public String toString() {
@@ -188,6 +211,18 @@ public class Main {
         return Integer.parseInt(choice);
     }
 
+    public static String createInstructions(Scanner keyboard){
+        String oStr = "";
+        int i = 1;
+        System.out.print("Enter instruction " + i++ + " or enter 0 to exit: ");
+        String input = keyboard.nextLine();
+        while (!input.equals("0")) {
+            oStr += i + ".) " + input + "\n";
+            System.out.print("Enter instruction " + i++ + " or enter 0 to exit: ");
+            input = keyboard.nextLine();
+        }
+        return oStr;
+    }
     // adds as many ingredients to recipe as user wants
     public static void ingredientHandler(Scanner keyboard, Recipe<Ingredient> recipe) {
         String yes = "y";
@@ -253,6 +288,7 @@ public class Main {
             yes = keyboard.nextLine();
         }
         ingredientHandler(keyboard, recipe);
+        recipe.setInstructions(createInstructions(keyboard));
         recipes.addRecipe(recipe);
     }
     public static void viewRecipe(Scanner keyboard, RecipeBook recipes){
@@ -266,6 +302,8 @@ public class Main {
             for (int i = 0; i < recipe.size(); i++) {
                 System.out.println(i+1 + ".) "+ recipe.getIngredient(i));
             }
+            System.out.println("\t\tRecipe instructions");
+            System.out.println(recipe.getInstructions());
         }
     }
 
@@ -289,6 +327,7 @@ public class Main {
             Recipe<Ingredient> recipe = recipes.getRecipe(num - 1);
             System.out.println("Edit Menu");
             System.out.println("---------------------------------------------");
+            // todo: add create new instructions option
             System.out.println("1. Remove an existing ingredient");
             System.out.println("2. Add an ingredient");
             System.out.println("3. Exit");
