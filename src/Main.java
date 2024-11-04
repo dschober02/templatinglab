@@ -2,9 +2,6 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// todo: Make Solid Ingredient in grams
-// todo: Set up instructions
-
 interface Ingredient {
     String getName();
     void setQuantity(float quantity);
