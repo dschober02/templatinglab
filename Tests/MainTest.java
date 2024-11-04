@@ -1,42 +1,37 @@
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 
-public class MainTest {
-    @Test
-    @DisplayName("Testing SolidIngredient Constructor and setter")
-    public void testSolidIngredientConstructor() {
-        // assemble
-        SolidIngredient si = new SolidIngredient("Banana", 5);
-        // act
-        si.setQuantity(2);
-        // assert
-        assertEquals("Banana", si.getName());
-        assertNotEquals(5, si.getQuantity());
-        assertEquals(2, si.getQuantity());
-    }
-    @Test
-    @DisplayName("Testing SolidIngredient toString")
-    public void testSolidIngredientToString() {
-        // assemble and act
-        SolidIngredient si = new SolidIngredient("Banana", 5);
-        String expected = "Banana: 5.0 grams";
-        // assert
-        assertEquals(expected, si.toString());
-    }
-    @Test
-    @DisplayName("Testing SolidIngredient Constructor")
-    public void testLiquidIngredientConstructor() {
-        // assemble
-        LiquidIngredient li = new LiquidIngredient("Milk", 5);
-        // act
-        li.setQuantity(8);
-        // assert
-        assertEquals("Milk", li.getName());
-        assertNotEquals(5, li.getQuantity());
-        assertEquals(8, li.getQuantity());
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class MainTest {
+    private Recipe<Ingredient> recipe;
+
+    @BeforeEach
+    void setUp() {
+        recipe = new Recipe<>("Pancakes", "Mix ingredients and cook on a skillet.");
     }
 
+    @Test
+    void testAddSolidIngredient() {
+        SolidIngredient flour = new SolidIngredient("Flour", 200);
+        recipe.addIngredient(flour);
 
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        assertEquals(1, ingredients.size());
+        assertEquals("Flour", ingredients.get(0).getName());
+        assertEquals(200, ingredients.get(0).getQuantity());
+    }
+
+    @Test
+    void testAddLiquidIngredient() {
+        Ingredient milk = new LiquidIngredient("Milk", 150);
+        recipe.addIngredient(milk);
+
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        assertEquals(1, ingredients.size());
+        assertEquals("Milk", ingredients.get(0).getName());
+        assertEquals(150, ingredients.get(0).getQuantity());
+    }
 }
