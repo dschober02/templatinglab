@@ -30,7 +30,7 @@ class SolidIngredient implements Ingredient {
     }
 
     public String toString() {
-        return name + ": " + grams;
+        return name + ": " + grams + " grams";
     }
 }
 
@@ -178,7 +178,7 @@ public class Main {
         int num = -1;
         int tries = 0;
         while (!valid) {
-            if (tries > 0) {
+            if (tries++ > 0) {
                 System.out.println("please enter a vlid ");
             }
             String number = keyboard.nextLine();
