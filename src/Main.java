@@ -179,7 +179,11 @@ public class Main {
     public static int validateNumber(int max, Scanner keyboard){
         boolean valid = false;
         int num = -1;
+        int tries = 0;
         while (!valid) {
+            if (tries > 0) {
+                System.out.println("please enter a vlid ");
+            }
             String number = keyboard.nextLine();
             try {
                 num = Integer.parseInt(number);
@@ -203,10 +207,10 @@ public class Main {
         System.out.println("5. Edit an existing Recipe");
         System.out.println("6. Exit");
         System.out.print("\t\tEnter your choice: ");
-        String choice = keyboard.next();
-        while (!choice.equals("5") && !choice.equals("4") && !choice.equals("3") && !choice.equals("2") && !choice.equals("1")) {
+        String choice = keyboard.nextLine();
+        while (!choice.equals("6") && !choice.equals("5") && !choice.equals("4") && !choice.equals("3") && !choice.equals("2") && !choice.equals("1")) {
             System.out.print("Please enter a valid integer: ");
-            choice = keyboard.next();
+            choice = keyboard.nextLine();
         }
         return Integer.parseInt(choice);
     }
@@ -214,11 +218,11 @@ public class Main {
     public static String createInstructions(Scanner keyboard){
         String oStr = "";
         int i = 1;
-        System.out.print("Enter instruction " + i++ + " or enter 0 to exit: ");
+        System.out.print("Enter instruction " + i + " or enter 0 to exit: ");
         String input = keyboard.nextLine();
         while (!input.equals("0")) {
-            oStr += i + ".) " + input + "\n";
-            System.out.print("Enter instruction " + i++ + " or enter 0 to exit: ");
+            oStr += i++ + ".) " + input + "\n";
+            System.out.print("Enter instruction " + i + " or enter 0 to exit: ");
             input = keyboard.nextLine();
         }
         return oStr;
@@ -236,7 +240,7 @@ public class Main {
             if (input.equals("s")) {
                 System.out.print("Name of ingredient: ");
                 String name = keyboard.nextLine().toLowerCase();
-                System.out.print("Quantity: ");
+                System.out.print("Quantity in grams: ");
                 String quantity = keyboard.nextLine();
                 while (!isFloat(quantity)) {
                     System.out.print("Please enter a valid number: ");
@@ -287,22 +291,26 @@ public class Main {
             System.out.print("Please input characters y or n: ");
             yes = keyboard.nextLine();
         }
-        ingredientHandler(keyboard, recipe);
+        if (yes.equals("y"))
+            ingredientHandler(keyboard, recipe);
         recipe.setInstructions(createInstructions(keyboard));
         recipes.addRecipe(recipe);
     }
     public static void viewRecipe(Scanner keyboard, RecipeBook recipes){
+        System.out.println("\t\t\nRecipe List:\n");
         System.out.println(recipes);
         System.out.println("----------------------------------------------");
         System.out.print("Enter the number of the recipe you would like to view or enter 0 to cancel: ");
         // max needs to be
         int num = validateNumber(recipes.size(), keyboard);
+        System.out.println("\n");
+        System.out.println("\t\tRecipe Ingredients\n");
         if (num != 0) {
             Recipe<Ingredient> recipe = recipes.getRecipe(num - 1);
             for (int i = 0; i < recipe.size(); i++) {
                 System.out.println(i+1 + ".) "+ recipe.getIngredient(i));
             }
-            System.out.println("\t\tRecipe instructions");
+            System.out.println("\n\t\tRecipe instructions\n");
             System.out.println(recipe.getInstructions());
         }
     }
@@ -325,43 +333,39 @@ public class Main {
         int num = validateNumber(recipes.size(), keyboard);
         if (num != 0) {
             Recipe<Ingredient> recipe = recipes.getRecipe(num - 1);
-            System.out.println("Edit Menu");
+            System.out.println("\n" +recipe.toString());
+            System.out.println("\nRecipe Instructions:\n" + recipe.getInstructions());
+            System.out.println("\n\t\tEdit Menu");
             System.out.println("---------------------------------------------");
-            // todo: add create new instructions option
             System.out.println("1. Remove an existing ingredient");
             System.out.println("2. Add an ingredient");
-            System.out.println("3. Exit");
+            System.out.println("3. Create new instructions");
+            System.out.println("4. Exit");
             System.out.println();
             System.out.print("Enter your choice: ");
             String choice = keyboard.nextLine();
-            while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3")) {
+            while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3") && !choice.equals("4")) {
                 System.out.print("Please input a valid number: ");
                 choice = keyboard.nextLine();
             }
             num = Integer.parseInt(choice);
-            for (int i = 0; i < recipe.size(); i++) {
-                System.out.println(i+1 + ".) "+ recipe.getIngredient(i));
-            }
-            System.out.print("Enter the number of the recipe you would like to edit or enter 0 to cancel: ");
-            // max needs to be the size of the recipe
-            int num2 = validateNumber(recipe.size(), keyboard);
             switch (num) {
                 case 1 -> {
-                    Ingredient ingredient = recipe.getIngredient(num2 - 1);
-                    System.out.print("Enter the cups for "+ ingredient.getName() + " or 0 to exit: ");
-                    String newNum = keyboard.nextLine();
-                    while (!isFloat(newNum)) {
-                        System.out.print("Please enter a valid number: ");
-                        newNum = keyboard.nextLine();
+                    for (int i = 0; i < recipe.size(); i++) {
+                        System.out.println(i+1 + ".) "+ recipe.getIngredient(i));
                     }
-                    if (!newNum.equals("0")) {
-                        ingredient.setQuantity(Float.parseFloat(newNum));
-                        System.out.println("Updated ingredient: " + ingredient);
-                    }
-
+                    System.out.print("Enter the number of the ingredient you would like to remove or enter 0 to cancel: ");
+                    // max needs to be the size of the recipe
+                    num = validateNumber(recipe.size(), keyboard);
+                    recipe.removeIngredient(num - 1);
+                    editRecipe(keyboard, recipes);
                 }
                 case 2 -> {
-                    recipe.removeIngredient(num2 - 1);
+                    ingredientHandler(keyboard, recipe);
+                    editRecipe(keyboard, recipes);
+                }
+                case 3 -> {
+                    recipe.setInstructions(createInstructions(keyboard));
                     editRecipe(keyboard, recipes);
                 }
                 default -> System.out.println("\t\tSending you back to the menu...\n\n");
@@ -384,7 +388,10 @@ public class Main {
             switch (choice) {
                 case 1 -> createRecipe(keyboard, recipes);
                 case 2 -> viewRecipe(keyboard, recipes);
-                case 3 -> System.out.println(recipes);
+                case 3 -> {
+                    System.out.println("\t\tRecipe List:\n");
+                    System.out.println(recipes);
+                }
                 case 4 -> deleteRecipe(keyboard, recipes);
                 default -> editRecipe(keyboard, recipes);
             }
