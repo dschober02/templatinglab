@@ -179,7 +179,7 @@ public class Main {
         int tries = 0;
         while (!valid) {
             if (tries++ > 0) {
-                System.out.println("please enter a vlid ");
+                System.out.print("please enter a valid number: ");
             }
             String number = keyboard.nextLine();
             try {
@@ -205,7 +205,8 @@ public class Main {
         System.out.println("6. Exit");
         System.out.print("\t\tEnter your choice: ");
         String choice = keyboard.nextLine();
-        while (!choice.equals("6") && !choice.equals("5") && !choice.equals("4") && !choice.equals("3") && !choice.equals("2") && !choice.equals("1")) {
+        while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3") && !choice.equals("4") &&
+                !choice.equals("5") && !choice.equals("6")) {
             System.out.print("Please enter a valid integer: ");
             choice = keyboard.nextLine();
         }
