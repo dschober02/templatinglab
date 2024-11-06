@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class RecipeBook {
-    private final ArrayList<Recipe> recipes;
+    private ArrayList<Recipe<Ingredient>> recipes;
 
     public RecipeBook() {
         recipes = new ArrayList<>();
@@ -11,15 +11,15 @@ public class RecipeBook {
         recipes = new ArrayList<>(size);
     }
 
-    public void addRecipe(Recipe recipe) {
+    public void addRecipe(Recipe<Ingredient> recipe) {
         recipes.add(recipe);
     }
 
-    public Recipe getRecipe(int i) {
+    public Recipe<Ingredient> getRecipe(int i) {
         return recipes.get(i);
     }
 
-    public Recipe removeRecipe(int i) {
+    public Recipe<Ingredient> removeRecipe(int i) {
         return recipes.remove(i);
     }
 
